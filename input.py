@@ -2,14 +2,11 @@
 
 
 def anzns(filename):
-  print(filename)
   storing = False
   fulltext = ''
   store = []
-  g = open(filename,'r')
-  print(g)
-  for line in g:
-    print(line)
+  for line in open(filename,'r'):
+    line = line.rstrip()
     if line.startswith('Full text:'):
       storing = True
       fulltext = line[10:].lower()
@@ -25,7 +22,7 @@ def anzns(filename):
       year = line[18:]
       store.append((year,fulltext))
 
-    return store
+  return store
 
 
 def factiva(filename):
