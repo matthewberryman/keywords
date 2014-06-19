@@ -7,7 +7,6 @@ years = set()
 keywords = []; patterns = []; results = {}
 
 for keyword in open('keywords.txt','r'):
-  print(keyword.rstrip())
   patterns.append(re.compile(keyword.rstrip(),re.IGNORECASE))
   results[patterns[-1].pattern] = {}
 
@@ -20,8 +19,6 @@ l = input.anzns('anzns.txt')
 for tuple in l:
   for pattern in patterns:
     years.add(tuple[0])
-    print (years)
-
     try:
       results[pattern.pattern][tuple[0]] += len(pattern.findall(tuple[1]))
     except:
