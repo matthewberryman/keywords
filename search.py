@@ -25,12 +25,10 @@ for tuple in l:
       results[pattern.pattern][tuple[0]] = len(pattern.findall(tuple[1]))
 
 
-print(',',end='')
+print('',end=',')
 
 years = list(years)
-print(years)
 years.sort()
-print(years)
 
 for year in years:
     print(year,end=',')
