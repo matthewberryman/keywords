@@ -2,29 +2,47 @@
 
 import input, re
 
-
+years = set()
 
 keywords = []; patterns = []; results = {}
 
 for keyword in open('keywords.txt','r'):
-  patterns.append(re.compile(keyword.chomp()))
-  results[keyword] = {}
+  print(keyword.rstrip())
+  patterns.append(re.compile(keyword.rstrip(),re.IGNORECASE))
+  results[patterns[-1].pattern] = {}
 
-print(patterns)
 
 l = input.anzns('anzns.txt')
-#l += input.factiva('factiva.txt')]
 
-print(l)
+#l += input.factiva('factiva.txt')]
 
 
 for tuple in l:
   for pattern in patterns:
-    try:
-      results[pattern.pattern()][tuple[0]] += len(pattern.findall(tuple[1],re.I))
-    except:
-      results[pattern.pattern()][tuple[0]] = len(pattern.findall(tuple[1],re.I))
+    years.add(tuple[0])
+    print (years)
 
-for keyword in results:
-  for year, number in results[keyword].items:
-    print(year,' ',keyword,' ',number)
+    try:
+      results[pattern.pattern][tuple[0]] += len(pattern.findall(tuple[1]))
+    except:
+      results[pattern.pattern][tuple[0]] = len(pattern.findall(tuple[1]))
+
+
+print(',',end='')
+
+years = list(years)
+print(years)
+years.sort()
+print(years)
+
+for year in years:
+    print(year,end=',')
+
+print()
+
+
+for pattern in patterns:
+    print(pattern.pattern,end=',')
+    for year in years:
+      print(results[pattern.pattern][year],end=',')
+    print()
