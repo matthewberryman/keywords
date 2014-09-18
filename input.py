@@ -4,6 +4,8 @@
 def anzns(filename):
   storing = False
   fulltext = ''
+  year = ''
+  location = ''
   store = []
   for line in open(filename,'r'):
     line = line.rstrip()
@@ -20,7 +22,10 @@ def anzns(filename):
 
     if line.startswith('Publication year:'):
       year = line[18:]
-      store.append((year,fulltext))
+
+    if line.startswith('Place of publication:'):
+      location = line[22:]
+      store.append((year,location,fulltext))
 
   return store
 
