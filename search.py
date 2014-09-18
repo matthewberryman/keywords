@@ -2,6 +2,8 @@
 
 import input, re
 
+from textblob import TextBlob
+
 years = set()
 
 keywords = []; patterns = []; results = {}; sentiment = {}
@@ -29,6 +31,10 @@ l = input.anzns('anzns.txt')
 
 words = re.compile('\w+')
 
+sentiment = {'local': 0, 'other': 0}
+n = {'local': 0, 'other': 0}
+
+
 for tuple in l:
   for pattern in patterns:
     years.add(tuple[0])
@@ -38,32 +44,19 @@ for tuple in l:
       results[pattern.pattern][tuple[0]] = len(pattern.findall(tuple[2]))
 
   # Sentiment analysis:
-  modifying = False
-  negative = 0
-  positive = 0
-  for word in words.findall(tuple[2].lower()):
-    if word in negation_words:
-      modifying = True
-    elif word in positive_words:
-      if modifying:
-        negative += 1
-        modifying = False
-      else:
-        positive += 1
-    elif word in negative_words:
-      if modifying:
-        positive += 1
-        modifying = False
-      else:
-        modifying = True
-    else:
-      modifying = False
+  blob = TextBlob(tuple[2])
+  polarity = blob.sentiment.polarity
+  if (tuple[1].startswith('Wollongong') or tuple[1].startswith('Kiama')):
+    sentiment['local'] += blob.sentiment.polarity
+    n['local'] += 1
+  else:
+    sentiment['other'] += blob.sentiment.polarity
+    n['other'] += 1
 
-    # Count by location (local, other):
-    try:
-      sentiment[tuple[1]] += positive - negative
-    except KeyError:
-      sentiment[tuple[1]] = 0
+for key in sentiment.keys():
+  sentiment[key] = sentiment[key]/n[key]
+
+print(sentiment)
 
 print('',end=',')
 
