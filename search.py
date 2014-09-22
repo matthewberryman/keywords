@@ -31,8 +31,8 @@ l = input.anzns('anzns.txt')
 
 words = re.compile('\w+')
 
-sentiment = {'local': 0, 'other': 0}
-n = {'local': 0, 'other': 0}
+sentiment = {'Wollongong': 0, 'Kiama': 0, 'other': 0}
+n = {'Wollongong': 0, 'Kiama': 0, 'other': 0}
 
 
 for tuple in l:
@@ -45,10 +45,14 @@ for tuple in l:
 
   # Sentiment analysis:
   blob = TextBlob(tuple[2])
+  print(tuple[1])
   polarity = blob.sentiment.polarity
-  if (tuple[1].startswith('Wollongong') or tuple[1].startswith('Kiama')):
-    sentiment['local'] += blob.sentiment.polarity
-    n['local'] += 1
+  if (tuple[1].startswith('Wollongong')):
+    sentiment['Wollongong'] += blob.sentiment.polarity
+    n['Wollongong'] += 1
+  elif (tuple[1].startswith('Kiama')):
+    sentiment['Kiama'] += blob.sentiment.polarity
+    n['Kiama'] += 1
   else:
     sentiment['other'] += blob.sentiment.polarity
     n['other'] += 1
@@ -56,6 +60,7 @@ for tuple in l:
 for key in sentiment.keys():
   sentiment[key] = sentiment[key]/n[key]
 
+print(n)
 print(sentiment)
 
 print('',end=',')
@@ -78,6 +83,3 @@ for pattern in patterns:
 print()
 
 print()
-
-for location in sentiment:
-  print(location+','+str(sentiment[location]))
