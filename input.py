@@ -14,7 +14,7 @@ def anzns(filename):
       fulltext = line[10:].lower()
     else:
       if storing:
-        fulltext += line
+        fulltext += ' ' + line
 
     if line.startswith('Subject:'):
       storing = False
@@ -25,7 +25,8 @@ def anzns(filename):
 
     if line.startswith('Place of publication:'):
       location = line[22:]
-      store.append((year,location,fulltext))
+      if len(fulltext) > 1:
+          store.append((year,location,fulltext))
 
   return store
 
