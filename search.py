@@ -113,17 +113,18 @@ for i in range(6):
   kiama_article = TextBlob(kiama_articles[i])
   other_article = TextBlob(random.choice(other_articles))
   wollongong_text.write('Article ' + str(i) + ':\n')
-  for sentence in wollongong_article.sentences:
+  for sentence in wollongong_article.raw_sentences:
+    print('sentence: ' + sentence)
     wollongong_text.write(sentence + ',\n')
   wollongong_text.write('\n')
 
   kiama_text.write('Article ' + str(i) + ':\n')
-  for sentence in kiama_article.sentences:
+  for sentence in kiama_article.raw_sentences:
     kiama_text.write(sentence + ',\n')
   kiama_text.write('\n')
 
   other_text.write('Article ' + str(i) + ':\n')
-  for sentence in other_article.sentences:
+  for sentence in other_article.raw_sentences:
     other_text.write(sentence + ',\n')
   other_text.write('\n')
 
