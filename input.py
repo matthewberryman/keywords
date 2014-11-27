@@ -1,5 +1,17 @@
 #!/usr/local/bin/python3
 
+def load_training_data(filenames):
+  training_set = []
+  for filename in filenames:
+    for line in open(filename,'r'):
+      line = line.rstrip()
+      if line.endswith(',-1'):
+        training_set.append((line[0:-3],'neg'))
+      elif line.endswith(',1'):
+        training_set.append((line[0:-2],'pos'))
+      elif line.endswith(',0'):
+        training_set.append((line[0:-2],'neu'))
+  return training_set
 
 def anzns(filename):
   storing = False

@@ -27,16 +27,7 @@ for negation_word in open('negation_words.txt','r'):
 
 # now build a custom classifier
 
-train = []
-
-for positive_word in positive_words:
-  train.append((positive_word,'pos'))
-  for negation_word in negation_words:
-    train.append((negation_word + ' ' + positive_word,'neg'))
-for negative_word in negative_words:
-  train.append((negative_word,'neg'))
-  for negation_word in negation_words:
-    train.append((negation_word + ' ' + negative_word,'pos'))
+train = input.load_training_data(['wollongong_training_analysis.txt', 'kiama_training_analysis.txt', 'other_training_analysis.txt', 'training_2_analysed.txt'])
 
 cl = NaiveBayesClassifier(train)
 
@@ -71,19 +62,28 @@ for tuple in l:
       results[pattern.pattern][tuple[0]] = len(pattern.findall(tuple[2]))
 
   # Sentiment analysis:
-  blob = TextBlob(tuple[2])
+  blob = TextBlob(tuple[2],classifier=cl)
   polarity = 0.0
   for sentence in blob.sentences:
-    polarity += sentence.sentiment.polarity
-    if sentence.sentiment.polarity >= 0.0:
-      positive_phrases.write(tuple[2])
+    polarity = 0
+    sent = sentence.classify()
+    print(sentence,end=',')
+    print(sent)
+    if sent == 'pos':
+      polarity = 1
+    elif sent == 'neg':
+      polarity = -1
+    if (tuple[1].startswith('Wollongong')):
+      sentiment['Wollongong'] += polarity
+      n['Wollongong'] += 1
+    elif (tuple[1].startswith('Kiama')):
+      sentiment['Kiama'] += polarity
+      n['Kiama'] += 1
     else:
-      negative_phrases.write(tuple[2])
+      sentiment['other'] += polarity
+      n['other'] += 1
 
-#  sent = cl.classify(tuple[2])
-#  polarity = 0
-#  if sent == 'pos':
-#    positive_phrases.write(tuple[2])
+
 #    polarity = 1
 #  else:
 #    negative_phrases.write(tuple[2])
@@ -101,31 +101,38 @@ for tuple in l:
     sentiment['other'] += polarity
     n['other'] += 1
 
-print('Len')
-print(len(wollongong_articles))
-print(len(kiama_articles))
-print(len(other_articles))
+#print('Len')
+#print(len(wollongong_articles))
+#print(len(kiama_articles))
+#print(len(other_articles))
 
-print(wollongong_articles)
+#print(wollongong_articles)
 
-for i in range(6):
+for i in range(min(len(wollongong_articles),30)):
   wollongong_article = TextBlob(random.choice(wollongong_articles))
-  kiama_article = TextBlob(kiama_articles[i])
-  other_article = TextBlob(random.choice(other_articles))
+
   wollongong_text.write('Article ' + str(i) + ':\n')
-  for sentence in wollongong_article.raw_sentences:
-    print('sentence: ' + sentence)
-    wollongong_text.write(sentence + ',\n')
+  for sentence in wollongong_article.sentences:
+    if 'NBN' in sentence:
+      wollongong_text.write(str(sentence) + ',\n')
   wollongong_text.write('\n')
 
+for i in range(min(len(kiama_articles),30)):
+
+  kiama_article = TextBlob(kiama_articles[i])
   kiama_text.write('Article ' + str(i) + ':\n')
-  for sentence in kiama_article.raw_sentences:
-    kiama_text.write(sentence + ',\n')
+  for sentence in kiama_article.sentences:
+    if 'NBN' in sentence:
+      kiama_text.write(str(sentence) + ',\n')
   kiama_text.write('\n')
 
+for i in range(min(len(other_articles),30)):
+
+  other_article = TextBlob(random.choice(other_articles))
   other_text.write('Article ' + str(i) + ':\n')
   for sentence in other_article.raw_sentences:
-    other_text.write(sentence + ',\n')
+    if 'NBN' in sentence:
+      other_text.write(str(sentence) + ',\n')
   other_text.write('\n')
 
 for key in sentiment.keys():
@@ -139,18 +146,17 @@ print('',end=',')
 years = list(years)
 years.sort()
 
-for year in years:
-    print(year,end=',')
+#for year in years:
+#    print(year,end=',')
 
-print()
+#print()
 
+#for pattern in patterns:
+#    print(pattern.pattern,end=',')
+#    for year in years:
+#      print(results[pattern.pattern][year],end=',')
+#    print()
 
-for pattern in patterns:
-    print(pattern.pattern,end=',')
-    for year in years:
-      print(results[pattern.pattern][year],end=',')
-    print()
+#print()
 
-print()
-
-print()
+#print()
