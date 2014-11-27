@@ -27,7 +27,7 @@ for negation_word in open('negation_words.txt','r'):
 
 # now build a custom classifier
 
-train = input.load_training_data(['wollongong_training_analysis.txt', 'kiama_training_analysis.txt', 'other_training_analysis.txt', 'training_2_analysed.txt'])
+train = input.load_training_data(['training_2_analysed.txt'])
 
 cl = NaiveBayesClassifier(train)
 
