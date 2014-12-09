@@ -27,11 +27,15 @@ for negation_word in open('negation_words.txt','r'):
 
 # now build a custom classifier
 
-train = input.load_training_data(['training_2_analysed.txt'])
+train = input.load_training_data(['training_2_cleaned_analysed.txt'])
 
 cl = NaiveBayesClassifier(train)
 
+import train_test
 
+train_test.test_classifier('test_cleaned_analysed.txt',cl)
+
+quit()
 
 l = input.anzns('anzns.txt')
 
