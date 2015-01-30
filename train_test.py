@@ -3,7 +3,7 @@
 
 
 
-def test_classifier(test_set):
+def test_classifier(test_set,classifier):
   correct_results = {'pos' : 0, 'neg': 0, 'neu': 0}
   incorrect_results = {'pos' : 0, 'neg': 0, 'neu': 0}
 
@@ -20,7 +20,6 @@ def test_classifier(test_set):
 
 def classifier(input):
   sentiment = {}
-  for tuple in input:
   sentiment = {'Wollongong': 0, 'Kiama': 0, 'other': 0}
   n = {'Wollongong': 0, 'Kiama': 0, 'other': 0}
 
@@ -35,9 +34,7 @@ def classifier(input):
   kiama_articles = []
   other_articles = []
 
-
-
-  for tuple in l:
+  for tuple in input:
     for pattern in patterns:
       years.add(tuple[0])
       try:

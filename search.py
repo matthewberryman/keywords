@@ -76,7 +76,8 @@ for key in sentiment.keys():
 print(n)
 print(sentiment)
 
-print('',end=',')
+print('')
+#print('', end=',')
 
 years = list(years)
 years.sort()
