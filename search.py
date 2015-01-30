@@ -12,98 +12,29 @@ random.seed()
 keywords = []; patterns = []; results = {}; sentiment = {}
 positive_words = set(); negative_words = set(); negation_words = set()
 
-# input keywords
-for keyword in open('keywords.txt','r'):
-  patterns.append(re.compile(keyword.rstrip(),re.IGNORECASE))
-  results[patterns[-1].pattern] = {}
 
-# input positive, negative, and negation words for sentiment analysis
-for positive_word in open('positive_words.txt','r'):
-  positive_words.add(positive_word.rstrip())
-for negative_word in open('negative_words.txt','r'):
-  negative_words.add(negative_word.rstrip())
-for negation_word in open('negation_words.txt','r'):
-  negation_words.add(negation_word.rstrip())
+
 
 # now build a custom classifier
 
-train = input.load_training_data(['training_2_cleaned_analysed.txt'])
+train = input.load_set(['training_2_cleaned_analysed.txt'])
 
 cl = NaiveBayesClassifier(train)
 
 import train_test
 
-train_test.test_classifier('test_cleaned_analysed.txt',cl)
+(correct_results, incorrect_results) = train_test.test_classifier('test_cleaned_analysed.txt',cl)
 
-quit()
+print('category,number correct,number incorrect,total number')
+for category in correct_results:
+  print(category+','+str(correct_results[category])+','+str(incorrect_results[category])+','+str(correct_results[category] + incorrect_results[category]))
 
 l = input.anzns('anzns.txt')
 
 #l += input.factiva('factiva.txt')]
 
-words = re.compile('\w+')
-
-sentiment = {'Wollongong': 0, 'Kiama': 0, 'other': 0}
-n = {'Wollongong': 0, 'Kiama': 0, 'other': 0}
-
-positive_phrases=open('positive_classifications.txt','w')
-negative_phrases=open('negative_classifications.txt','w')
-
-wollongong_text = open('wollongong.txt','w')
-kiama_text = open('kiama.txt','w')
-other_text = open('other.txt','w')
-
-wollongong_articles = []
-kiama_articles = []
-other_articles = []
-
-for tuple in l:
-  for pattern in patterns:
-    years.add(tuple[0])
-    try:
-      results[pattern.pattern][tuple[0]] += len(pattern.findall(tuple[2]))
-    except:
-      results[pattern.pattern][tuple[0]] = len(pattern.findall(tuple[2]))
-
-  # Sentiment analysis:
-  blob = TextBlob(tuple[2],classifier=cl)
-  polarity = 0.0
-  for sentence in blob.sentences:
-    polarity = 0
-    sent = sentence.classify()
-    print(sentence,end=',')
-    print(sent)
-    if sent == 'pos':
-      polarity = 1
-    elif sent == 'neg':
-      polarity = -1
-    if (tuple[1].startswith('Wollongong')):
-      sentiment['Wollongong'] += polarity
-      n['Wollongong'] += 1
-    elif (tuple[1].startswith('Kiama')):
-      sentiment['Kiama'] += polarity
-      n['Kiama'] += 1
-    else:
-      sentiment['other'] += polarity
-      n['other'] += 1
 
 
-#    polarity = 1
-#  else:
-#    negative_phrases.write(tuple[2])
-#    polarity = -1
-  if (tuple[1].startswith('Wollongong')):
-    wollongong_articles.append(tuple[2])
-    sentiment['Wollongong'] += polarity
-    n['Wollongong'] += 1
-  elif (tuple[1].startswith('Kiama')):
-    kiama_articles.append(tuple[2])
-    sentiment['Kiama'] += polarity
-    n['Kiama'] += 1
-  else:
-    other_articles.append(tuple[2])
-    sentiment['other'] += polarity
-    n['other'] += 1
 
 #print('Len')
 #print(len(wollongong_articles))
