@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-
-
-
 def test_classifier(test_set,classifier):
   correct_results = {'pos' : 0, 'neg': 0, 'neu': 0}
   incorrect_results = {'pos' : 0, 'neg': 0, 'neu': 0}
@@ -10,6 +7,7 @@ def test_classifier(test_set,classifier):
   n = [0,0,0]
   for item in test_set:
     classification = classifier.classify(item[0])
+    print(item)
     #print (str(item)+','+classification)
     if classification == item[1]:
       correct_results[item[1]] += 1

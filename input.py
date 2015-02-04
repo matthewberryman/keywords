@@ -51,7 +51,7 @@ def read_anzns(filename):
         except KeyError:
           store[location] = {}
         try:
-          by_year[year].add(fulltext)
+          by_year[year].append(fulltext)
         except KeyError:
           by_year[year] = [fulltext]
         store[location] = by_year

@@ -18,18 +18,19 @@ positive_words = set(); negative_words = set(); negation_words = set()
 # now build a custom classifier
 
 train = input.load_set(['training_2_cleaned_analysed.txt'])
+test = input.load_set(['test_cleaned_analysed.txt'])
 
 cl = NaiveBayesClassifier(train)
 
 import train_test
 
-(correct_results, incorrect_results) = train_test.test_classifier('test_cleaned_analysed.txt',cl)
+(correct_results, incorrect_results) = train_test.test_classifier(test,cl)
 
 print('category,number correct,number incorrect,total number')
 for category in correct_results:
   print(category+','+str(correct_results[category])+','+str(incorrect_results[category])+','+str(correct_results[category] + incorrect_results[category]))
 
-l = input.anzns('anzns.txt')
+l = input.read_anzns('anzns.txt')
 
 #l += input.factiva('factiva.txt')]
 
