@@ -3,6 +3,8 @@
 import random
 from textblob import TextBlob
 
+
+
 def load_set(filenames): # for loading a test or training set
   set = []
   for filename in filenames:
@@ -81,3 +83,40 @@ def factiva(filename):
       fulltext = ''
 
     return store
+
+# Generate input data
+
+if __name__ == '__main__':
+  articles = read_anzs('anzns.txt')
+
+  # fixme: needs to be stored into arrays
+
+  wollongong_articles = []
+  kiama_articles = []
+  other_articles = []
+
+
+
+  for i in range(min(len(wollongong_articles),30)):
+    wollongong_article = TextBlob(random.choice(wollongong_articles))
+    wollongong_text.write('Article ' + str(i) + ':\n')
+    for sentence in wollongong_article.sentences:
+      if 'NBN' in sentence:
+        wollongong_text.write(str(sentence) + ',\n')
+    wollongong_text.write('\n')
+
+  for i in range(min(len(kiama_articles),30)):
+    kiama_article = TextBlob(kiama_articles[i])
+    kiama_text.write('Article ' + str(i) + ':\n')
+    for sentence in kiama_article.sentences:
+      if 'NBN' in sentence:
+        kiama_text.write(str(sentence) + ',\n')
+    kiama_text.write('\n')
+
+  for i in range(min(len(other_articles),30)):
+    other_article = TextBlob(random.choice(other_articles))
+    other_text.write('Article ' + str(i) + ':\n')
+    for sentence in other_article.raw_sentences:
+      if 'NBN' in sentence:
+        other_text.write(str(sentence) + ',\n')
+    other_text.write('\n')
