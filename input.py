@@ -87,7 +87,7 @@ def factiva(filename):
 # Generate input data
 
 if __name__ == '__main__':
-  articles = read_anzs('anzns.txt')
+  articles = read_anzns('anzns.txt')
 
   # fixme: needs to be stored into arrays
 
@@ -95,7 +95,19 @@ if __name__ == '__main__':
   kiama_articles = []
   other_articles = []
 
+  for location in articles.keys():
+    if location.startswith('Wollongong'):
 
+      for article in [items in articles[location].values()]:
+        wollongong_articles.append(article)
+    elif location.startswith('Kiama'):
+      for article in articles[location].values():
+        kiama_articles.append(article)
+    else:
+      for article in articles[location].values():
+        other_articles.append(article)
+
+  print(wollongong_articles[0][0])
 
   for i in range(min(len(wollongong_articles),30)):
     wollongong_article = TextBlob(random.choice(wollongong_articles))
