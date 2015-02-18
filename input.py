@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 
-import random
+import random, itertools
 from textblob import TextBlob
 
 
@@ -46,7 +46,8 @@ def read_anzns(filename):
     if line.startswith('Place of publication:'):
       location = line[22:]
 
-    if len(fulltext) > 1:
+    if len(fulltext) > 1 and not storing:
+        print(fulltext)
         by_year = {}
         try:
           by_year = store[location]
@@ -57,6 +58,7 @@ def read_anzns(filename):
         except KeyError:
           by_year[year] = [fulltext]
         store[location] = by_year
+        fulltext = ''
   return store
 
 
@@ -89,25 +91,27 @@ def factiva(filename):
 if __name__ == '__main__':
   articles = read_anzns('anzns.txt')
 
-  # fixme: needs to be stored into arrays
-
   wollongong_articles = []
   kiama_articles = []
   other_articles = []
 
-  for location in articles.keys():
-    if location.startswith('Wollongong'):
+  wollongong_text = open('wollongong.txt','w')
+  kiama_text = open('kiama.txt','w')
+  other_text = open('other.txt','w')
 
-      for article in [items in articles[location].values()]:
+  for location in articles.keys():
+    print(location)
+    if location.startswith('Wollongong'):
+      for article in [item for sublist in articles[location].values() for item in sublist]:
         wollongong_articles.append(article)
     elif location.startswith('Kiama'):
-      for article in articles[location].values():
+      for article in [item for sublist in articles[location].values() for item in sublist]:
         kiama_articles.append(article)
     else:
-      for article in articles[location].values():
+      for article in [item for sublist in articles[location].values() for item in sublist]:
         other_articles.append(article)
 
-  print(wollongong_articles[0][0])
+  print(wollongong_articles)
 
   for i in range(min(len(wollongong_articles),30)):
     wollongong_article = TextBlob(random.choice(wollongong_articles))
@@ -127,7 +131,7 @@ if __name__ == '__main__':
 
   for i in range(min(len(other_articles),30)):
     other_article = TextBlob(random.choice(other_articles))
-    other_text.write('Article ' + str(i) + ':\n')
+    other_text.write('Article ' + str(i+1) + ':\n')
     for sentence in other_article.raw_sentences:
       if 'NBN' in sentence:
         other_text.write(str(sentence) + ',\n')
