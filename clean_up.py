@@ -17,7 +17,8 @@ def cleanup_input_data(training_filename, test_filename):
   test = open(test_filename[0:-4]+'_cleaned.txt','w')
 
   for line in training_set:
-    print(line,file=training)
+    if (not re.search('Credit:',line)) and (not re.search('Title:',line)):
+      print(line,file=training)
 
   for line in test_set:
     if (not re.search('Credit:',line)) and (not re.search('Title:',line)):

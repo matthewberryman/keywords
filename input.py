@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 
-import random, itertools
+import random, itertools, sys
 from textblob import TextBlob
 
 
@@ -47,7 +47,7 @@ def read_anzns(filename):
       location = line[22:]
 
     if len(fulltext) > 1 and not storing:
-        print(fulltext)
+        print(location)
         by_year = {}
         try:
           by_year = store[location]
@@ -89,18 +89,25 @@ def factiva(filename):
 # Generate input data
 
 if __name__ == '__main__':
-  articles = read_anzns('anzns.txt')
+
+  filename = ''
+  if len(sys.argv) > 1:
+    filename = sys.argv[1]
+  else:
+    filename = 'anzns.txt'
+  articles = read_anzns(filename)
 
   wollongong_articles = []
   kiama_articles = []
   other_articles = []
 
-  wollongong_text = open('wollongong.txt','w')
-  kiama_text = open('kiama.txt','w')
-  other_text = open('other.txt','w')
+  wollongong_test = open('wollongong_test.txt','w')
+  wollongong_training = open('wollongong_training','w')
+  kiama_test = open('kiama_test.txt','w')
+  kiama_training = open('kiama_training.txt','w')
+  other_test = open('other_test.txt','w')
 
   for location in articles.keys():
-    print(location)
     if location.startswith('Wollongong'):
       for article in [item for sublist in articles[location].values() for item in sublist]:
         wollongong_articles.append(article)
@@ -111,28 +118,21 @@ if __name__ == '__main__':
       for article in [item for sublist in articles[location].values() for item in sublist]:
         other_articles.append(article)
 
-  print(wollongong_articles)
-
-  for i in range(min(len(wollongong_articles),30)):
+  for i in range(min(len(wollongong_articles),88)):
     wollongong_article = TextBlob(random.choice(wollongong_articles))
-    wollongong_text.write('Article ' + str(i) + ':\n')
     for sentence in wollongong_article.sentences:
       if 'NBN' in sentence:
         wollongong_text.write(str(sentence) + ',\n')
-    wollongong_text.write('\n')
 
-  for i in range(min(len(kiama_articles),30)):
+  for i in range(min(len(kiama_articles),88)):
+    print(str(i))
     kiama_article = TextBlob(kiama_articles[i])
-    kiama_text.write('Article ' + str(i) + ':\n')
     for sentence in kiama_article.sentences:
       if 'NBN' in sentence:
         kiama_text.write(str(sentence) + ',\n')
-    kiama_text.write('\n')
 
-  for i in range(min(len(other_articles),30)):
+  for i in range(min(len(other_articles),88)):
     other_article = TextBlob(random.choice(other_articles))
-    other_text.write('Article ' + str(i+1) + ':\n')
     for sentence in other_article.raw_sentences:
       if 'NBN' in sentence:
         other_text.write(str(sentence) + ',\n')
-    other_text.write('\n')
