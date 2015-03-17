@@ -2,6 +2,8 @@
 
 import re
 
+# Function for ensuring the tr
+
 def cleanup_input_data(training_filename, test_filename):
   training_set = set()
   test_set = set()
@@ -23,3 +25,8 @@ def cleanup_input_data(training_filename, test_filename):
   for line in test_set:
     if (not re.search('Credit:',line)) and (not re.search('Title:',line)):
       print(line,file=test)
+
+if __name__ == '__main__':
+  cleanup_input_data('kiama_training.txt', 'kiama_test.txt')
+  cleanup_input_data('wollongong_training.txt', 'wollongong_test.txt')
+  cleanup_input_data('other_training.txt', 'other_test.txt')
